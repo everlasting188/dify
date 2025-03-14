@@ -25,6 +25,7 @@ from core.prompt.utils.prompt_template_parser import PromptTemplateParser
 
 class LLMGenerator:
     @classmethod
+    #测试提交
     def generate_conversation_name(
         cls, tenant_id: str, query, conversation_id: Optional[str] = None, app_id: Optional[str] = None
     ):
