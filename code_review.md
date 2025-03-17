@@ -366,21 +366,26 @@ RerankRunnerFactory.create_rerank_runner实现的rank
 1. 从dataset获得dataset
 2. 获得process rule
 3. 通过IndexProcessorFactory创建对应的processer
-4. _extract方法拿到对应的文件
+4. _extract方法抽取拿到对应的文档（需要根据具体类型来选择抽取器）
 5. _transform做文件的转换，以QAIndexProcessor来说
 
 - ​	_get_splitter获得分割器
-
 - ​	针对每个文件进行如下操作
+- ​		分割文件，根据设置的chunk进行分割
+- ​		_format_qa_document进行格式化文件处理，需要单独的启动线程，包括：
+  - 通过模型获得响应
+  - 最后将相应直接进行format
 
-- ​		分割文件
-
-- ​		_format_qa_document进行格式化文件处理，需要单独的启动线程，包括：通过模型获得响应，最后将相应直接进行format
 
  6. _load_segments保存对应的文件到数据库
 
- 7. _load方法将对应的数据进行处理？？需要继续分析
+-  doc_store.add_documents获得分割后的segment
+  -  如果是需要embed处理，通过获得embed模型，获得对应的tokes
+  -  将对应的segment和token入库
 
+- ​	_update_document_index_status
+
+ 7. _load方法将对应的数据进行处理：insert index and update document/segment status to completed
     
 
 ## 2.4 AdvancedChatAppGenerator流程
